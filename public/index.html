@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Versand-Tracker</title>
+  <meta name="description" content="Alle Sendungen an einem Ort verfolgen – DHL, DPD, Hermes, GLS, UPS, FedEx, Post und viele mehr.">
+  <meta name="theme-color" content="#030409">
+  <meta name="color-scheme" content="dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pakete">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.9-4M4 4v4h4M4 13a8 8 0 0 0 14.9 4M20 20v-4h-4"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM4 7.5l8 4.5 8-4.5M12 12v9"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol>
+  </svg>
+
+  <div class="ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <header class="app-header">
+    <div class="container nav-bar">
+      <span class="nav-title" aria-hidden="true">Sendungen</span>
+      <div class="header-actions">
+        <button id="refresh-all" class="icon-btn" type="button" title="Alle aktualisieren" aria-label="Alle aktualisieren">
+          <svg class="icon"><use href="#i-refresh"/></svg>
+        </button>
+        <div class="menu-wrap">
+          <button id="menu-btn" class="icon-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menü">
+            <svg class="icon"><use href="#i-more"/></svg>
+          </button>
+          <div id="menu" class="menu glass" hidden>
+            <button type="button" data-action="notifications">Benachrichtigungen</button>
+            <button type="button" data-action="carriers">Unterstützte Paketdienste</button>
+            <button type="button" data-action="export">Sendungen exportieren</button>
+            <button type="button" data-action="import">Sendungen importieren</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="eyebrow"><img src="/icons/icon.svg" alt="" width="20" height="20"> Versand-Tracker</div>
+    <h1 class="large-title">Sendungen</h1>
+
+    <form id="add-form" class="add-card glass" autocomplete="off" novalidate>
+      <label for="number-input" class="add-label">Sendungsnummer</label>
+      <div class="add-row">
+        <input id="number-input" name="number" type="text" placeholder="z. B. 00340434161094042557"
+               autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="done" maxlength="60">
+        <button type="submit" class="btn btn-primary">
+          <svg class="icon"><use href="#i-plus"/></svg><span>Hinzufügen</span>
+        </button>
+      </div>
+      <p id="detect-hint" class="detect-hint" aria-live="polite"></p>
+      <details class="add-more">
+        <summary>Bezeichnung und Paketdienst (optional)</summary>
+        <div class="add-fields">
+          <label>Bezeichnung
+            <input id="label-input" name="label" type="text" placeholder="z. B. Neue Laufschuhe" maxlength="60">
+          </label>
+          <label>Paketdienst
+            <select id="carrier-select" name="carrier">
+              <option value="">Automatisch erkennen</option>
+            </select>
+          </label>
+        </div>
+      </details>
+    </form>
+
+    <label class="search-field glass">
+      <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="search" type="search" placeholder="Suchen" aria-label="Sendungen durchsuchen">
+    </label>
+
+    <ul id="shipment-list" class="shipment-list"></ul>
+
+    <section id="empty" class="empty" hidden>
+      <span class="empty-badge glass"><svg class="empty-icon" aria-hidden="true"><use href="#i-box"/></svg></span>
+      <h2 id="empty-title">Noch keine Sendungen</h2>
+      <p id="empty-text">Gib oben eine Sendungsnummer ein – der Paketdienst wird automatisch erkannt.</p>
+      <div id="demo-chips" class="chips" hidden></div>
+    </section>
+  </main>
+
+  <footer class="container app-footer">
+    <p id="provider-info"></p>
+  </footer>
+
+  <nav class="tabbar" aria-label="Ansicht">
+    <div class="segmented glass" role="group" aria-label="Filter">
+      <button type="button" data-filter="active" aria-pressed="true">Unterwegs <span class="count" data-count="active"></span></button>
+      <button type="button" data-filter="delivered" aria-pressed="false">Zugestellt <span class="count" data-count="delivered"></span></button>
+      <button type="button" data-filter="all" aria-pressed="false">Alle <span class="count" data-count="all"></span></button>
+    </div>
+    <button id="fab-add" class="fab glass" type="button" aria-label="Sendung hinzufügen" title="Sendung hinzufügen">
+      <svg class="icon"><use href="#i-plus"/></svg>
+    </button>
+  </nav>
+
+  <dialog id="detail-dialog" class="sheet" aria-labelledby="detail-title"></dialog>
+
+  <dialog id="carriers-dialog" class="sheet" aria-labelledby="carriers-title">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <h2 id="carriers-title">Unterstützte Paketdienste</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Schließen"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="sheet-body">
+      <p class="muted">
+        Diese Dienste erkennt die App automatisch an der Sendungsnummer. Internationale Post-Sendungen
+        (z. B. <code>RR123456785DE</code>) werden der Post des jeweiligen Landes zugeordnet – weltweit.
+        Mit einem Ship24- oder 17TRACK-Schlüssel kommen über 1.500 weitere Paketdienste als Live-Status dazu.
+      </p>
+      <div id="carrier-groups"></div>
+    </div>
+  </dialog>
+
+  <input id="import-file" type="file" accept="application/json,.json" hidden>
+  <div id="toast" class="toast glass" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

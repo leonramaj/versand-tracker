@@ -1,0 +1,23 @@
+{
+  "name": "Versand-Tracker",
+  "short_name": "Pakete",
+  "description": "Alle Sendungen an einem Ort verfolgen – DHL, DPD, Hermes, GLS, UPS, FedEx, Post und viele mehr.",
+  "lang": "de",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#030409",
+  "theme_color": "#030409",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  }
+}
