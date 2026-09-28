@@ -1,0 +1,17 @@
+{
+  "name": "versand-tracker",
+  "version": "1.0.0",
+  "description": "Sendungsverfolgung für alle Paketdienste – DHL, DPD, Hermes, GLS, UPS, FedEx, Post & mehr",
+  "private": true,
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20.12"
+  },
+  "license": "MIT"
+}
