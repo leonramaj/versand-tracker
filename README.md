@@ -20,7 +20,9 @@ auf dem Handy wie eine normale App installieren.
   zuletzt bekannten Daten
 - **Teilen aus anderen Apps** (Android): Versand-Mail „teilen“ → Versand-Tracker, die Nummer wird herausgesucht
 - **Datenschutz**: Deine Sendungen werden nur in deinem Browser gespeichert; Export/Import als JSON-Datei
-- Filter (Unterwegs / Zugestellt / Alle), Suche, Bezeichnungen, dunkles Design
+- Dunkles „Liquid Glass“-Design im iOS-Stil: Glasflächen mit Unschärfe und Lichtkanten, schwebende Leiste
+  unten, Detailansicht als Sheet (bei „Transparenz reduzieren“ automatisch deckende Flächen)
+- Filter (Unterwegs / Zugestellt / Alle), Suche, Bezeichnungen
 
 ## Schnellstart
 

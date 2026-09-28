@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Versand-Tracker</title>
   <meta name="description" content="Alle Sendungen an einem Ort verfolgen – DHL, DPD, Hermes, GLS, UPS, FedEx, Post und viele mehr.">
-  <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#030409">
+  <meta name="color-scheme" content="dark">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pakete">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
@@ -26,33 +27,38 @@
     <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></symbol>
     <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM4 7.5l8 4.5 8-4.5M12 12v9"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol>
   </svg>
 
+  <div class="ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+
   <header class="app-header">
-    <div class="brand">
-      <img src="/icons/icon.svg" alt="" width="32" height="32">
-      <h1>Versand-Tracker</h1>
-    </div>
-    <div class="header-actions">
-      <button id="refresh-all" class="icon-btn" type="button" title="Alle aktualisieren" aria-label="Alle aktualisieren">
-        <svg class="icon"><use href="#i-refresh"/></svg>
-      </button>
-      <div class="menu-wrap">
-        <button id="menu-btn" class="icon-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menü">
-          <svg class="icon"><use href="#i-more"/></svg>
+    <div class="container nav-bar">
+      <span class="nav-title" aria-hidden="true">Sendungen</span>
+      <div class="header-actions">
+        <button id="refresh-all" class="icon-btn" type="button" title="Alle aktualisieren" aria-label="Alle aktualisieren">
+          <svg class="icon"><use href="#i-refresh"/></svg>
         </button>
-        <div id="menu" class="menu" hidden>
-          <button type="button" data-action="notifications">Benachrichtigungen</button>
-          <button type="button" data-action="carriers">Unterstützte Paketdienste</button>
-          <button type="button" data-action="export">Sendungen exportieren</button>
-          <button type="button" data-action="import">Sendungen importieren</button>
+        <div class="menu-wrap">
+          <button id="menu-btn" class="icon-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="Menü">
+            <svg class="icon"><use href="#i-more"/></svg>
+          </button>
+          <div id="menu" class="menu glass" hidden>
+            <button type="button" data-action="notifications">Benachrichtigungen</button>
+            <button type="button" data-action="carriers">Unterstützte Paketdienste</button>
+            <button type="button" data-action="export">Sendungen exportieren</button>
+            <button type="button" data-action="import">Sendungen importieren</button>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <form id="add-form" class="add-card" autocomplete="off" novalidate>
+    <div class="eyebrow"><img src="/icons/icon.svg" alt="" width="20" height="20"> Versand-Tracker</div>
+    <h1 class="large-title">Sendungen</h1>
+
+    <form id="add-form" class="add-card glass" autocomplete="off" novalidate>
       <label for="number-input" class="add-label">Sendungsnummer</label>
       <div class="add-row">
         <input id="number-input" name="number" type="text" placeholder="z. B. 00340434161094042557"
@@ -77,19 +83,15 @@
       </details>
     </form>
 
-    <div class="toolbar">
-      <div class="segmented" role="group" aria-label="Filter">
-        <button type="button" data-filter="active" aria-pressed="true">Unterwegs <span class="count" data-count="active"></span></button>
-        <button type="button" data-filter="delivered" aria-pressed="false">Zugestellt <span class="count" data-count="delivered"></span></button>
-        <button type="button" data-filter="all" aria-pressed="false">Alle <span class="count" data-count="all"></span></button>
-      </div>
+    <label class="search-field glass">
+      <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
       <input id="search" type="search" placeholder="Suchen" aria-label="Sendungen durchsuchen">
-    </div>
+    </label>
 
     <ul id="shipment-list" class="shipment-list"></ul>
 
     <section id="empty" class="empty" hidden>
-      <svg class="empty-icon"><use href="#i-box"/></svg>
+      <span class="empty-badge glass"><svg class="empty-icon" aria-hidden="true"><use href="#i-box"/></svg></span>
       <h2 id="empty-title">Noch keine Sendungen</h2>
       <p id="empty-text">Gib oben eine Sendungsnummer ein – der Paketdienst wird automatisch erkannt.</p>
       <div id="demo-chips" class="chips" hidden></div>
@@ -100,9 +102,21 @@
     <p id="provider-info"></p>
   </footer>
 
+  <nav class="tabbar" aria-label="Ansicht">
+    <div class="segmented glass" role="group" aria-label="Filter">
+      <button type="button" data-filter="active" aria-pressed="true">Unterwegs <span class="count" data-count="active"></span></button>
+      <button type="button" data-filter="delivered" aria-pressed="false">Zugestellt <span class="count" data-count="delivered"></span></button>
+      <button type="button" data-filter="all" aria-pressed="false">Alle <span class="count" data-count="all"></span></button>
+    </div>
+    <button id="fab-add" class="fab glass" type="button" aria-label="Sendung hinzufügen" title="Sendung hinzufügen">
+      <svg class="icon"><use href="#i-plus"/></svg>
+    </button>
+  </nav>
+
   <dialog id="detail-dialog" class="sheet" aria-labelledby="detail-title"></dialog>
 
   <dialog id="carriers-dialog" class="sheet" aria-labelledby="carriers-title">
+    <div class="grabber" aria-hidden="true"></div>
     <div class="sheet-header">
       <h2 id="carriers-title">Unterstützte Paketdienste</h2>
       <button type="button" class="icon-btn" data-close aria-label="Schließen"><svg class="icon"><use href="#i-close"/></svg></button>
@@ -118,6 +132,6 @@
   </dialog>
 
   <input id="import-file" type="file" accept="application/json,.json" hidden>
-  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div id="toast" class="toast glass" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

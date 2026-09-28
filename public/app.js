@@ -603,6 +603,7 @@ function renderDetail() {
   const lowConfidence = !shipment.carrierId && closeAlternatives(detectCarriers(shipment.number)).length > 0;
 
   dialog.replaceChildren(
+    h('div', { class: 'grabber', 'aria-hidden': 'true' }),
     h('div', { class: 'sheet-header' },
       carrierBadge(carrier, shipment.number, true),
       h('div', { style: { flex: '1', 'min-width': '0' } },
@@ -612,11 +613,12 @@ function renderDetail() {
           h('button', { type: 'button', title: 'Nummer kopieren', 'aria-label': 'Nummer kopieren', onclick: copyNumber }, icon('copy')))),
       h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Schließen', onclick: closeDetail }, icon('close'))),
     h('div', { class: 'sheet-body' },
-      h('div', { class: 'detail-status' },
-        h('span', { style: { display: 'flex', 'align-items': 'center', gap: '8px' } },
-          statusPill(status), loading && h('span', { class: 'spinner', role: 'status', 'aria-label': 'Wird aktualisiert' })),
-        eta && h('span', { class: 'eta' }, eta)),
-      progressBar(status),
+      h('div', { class: 'status-panel glass' },
+        h('div', { class: 'detail-status' },
+          h('span', { style: { display: 'flex', 'align-items': 'center', gap: '8px' } },
+            statusPill(status), loading && h('span', { class: 'spinner', role: 'status', 'aria-label': 'Wird aktualisiert' })),
+          eta && h('span', { class: 'eta' }, eta)),
+        progressBar(status)),
       shipment.lastError && h('p', { class: 'notice error' }, shipment.lastError),
       result?.message && h('p', { class: 'notice' }, result.message),
       lowConfidence && h('p', { class: 'notice' },
@@ -822,6 +824,16 @@ function init() {
   });
   setupMenu();
   setupDialogs();
+
+  // Kopfzeile wird beim Scrollen zu einer Glasleiste mit kleinem Titel (wie bei iOS).
+  const header = $('.app-header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 48);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  $('#fab-add').addEventListener('click', () => {
+    $('#number-input').focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   document.addEventListener('visibilitychange', autoRefresh);
   window.addEventListener('online', () => { fetchInfo(); autoRefresh(); });

@@ -2,7 +2,7 @@
 // Strategie: Netzwerk zuerst (immer aktuell), bei fehlender Verbindung aus dem Cache.
 // API-Abfragen werden nie gecacht – die letzten Daten liegen ohnehin im Browser-Speicher.
 
-const CACHE = 'versand-tracker-v1';
+const CACHE = 'versand-tracker-v2';
 const SHELL = [
   '/', '/styles.css', '/app.js', '/shared/carriers.js', '/shared/status.js',
   '/manifest.webmanifest', '/icons/icon.svg', '/icons/icon-192.png',
